@@ -31,6 +31,8 @@ typedef struct DatasetFeature {
 
 #define FEATURE_COUNT_STEP 16
 typedef struct DatasetHeader {
+  DatasetFeature *label;
+  unsigned int label_index;
   DatasetFeature **features;
   unsigned short max_feature_count;
   unsigned short feature_count;
@@ -46,6 +48,8 @@ typedef struct DatasetEntry {
 } DatabaseEntry;
 
 typedef struct Dataset {
+  bool has_cached_counts;
+  unsigned int *counts;
   DatasetHeader *header;
   DatasetEntry *head;
   DatasetEntry *tail;
@@ -102,6 +106,7 @@ Dataset* dataset_create(DatasetHeader* header) {
   }
   Dataset *result = malloc(sizeof(*result));
   result->header = header;
+  result->has_cached_counts = false;
   result->head = NULL;
   result->tail = NULL;
   return result;
@@ -227,6 +232,8 @@ Dataset* dataset_load_from_disk(char* name) {
             if(token[0] == 'y') {
               // Verify that another feature is not the label already.
               if (!found_label) {
+                header->label = feature;
+                header->label_index = header->feature_count;
                 feature->is_label = true;
                 found_label = true;
               } else {
@@ -362,7 +369,7 @@ Dataset* dataset_load_from_disk(char* name) {
           if (found_dot) {
             precision++;
           }
-          if (token[i] == '\0') {
+          if (token[i] == '.') {
             found_dot = true;
           }
         }
@@ -373,6 +380,7 @@ Dataset* dataset_load_from_disk(char* name) {
         char *end;
         // Convert token into long, then cast into int.
         unsigned int value = strtol(token, &end, 10);
+        //printf("%u\n", column_id);
         entry->values[column_id].discrete = value;
       }
       column_id++;
