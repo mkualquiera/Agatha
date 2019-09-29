@@ -26,6 +26,8 @@ echo "<-> Running premake..."
 premake5 gmake2
 echo "<-> Running make..."
 make
+echo "<-> Copying datasets..."
+cp -r ./datasets ./bin/Debug/
 echo "<-> Starting program..."
 ./bin/Debug/Agatha
 echo "<-> Done!"
