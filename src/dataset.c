@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <float.h>
 #include "debug.h"
 
 typedef enum DataType {
@@ -59,6 +60,53 @@ typedef struct Dataset {
 
 #include "dataset.h"
 
+void dataset_entry_dispose(DatasetEntry *entry) {
+  free(entry->values);
+  free(entry);
+}
+
+DatasetEntry* dataset_entry_create(unsigned int feature_count) {
+  if (feature_count <= 1) {
+    if (DEBUG) {
+      printf("[%s : %d] %s\n", __FILE__, __LINE__, "WARNING !! Incorrect number of features for a dataset entry.");
+    }
+    return NULL;
+  }
+  DatasetEntry *result = malloc(sizeof(*result));
+  result->values = malloc(sizeof(DatasetValue) * feature_count);
+  return result;
+}
+
+void dataset_dispose(Dataset *dataset, bool free_header, bool free_data) {
+  if (free_header) {
+    free(dataset->header);
+  }
+  if (free_data) {
+    DatasetEntry *focus = dataset->head;
+    while((focus != dataset->tail) & (focus != NULL)) {
+      DatasetEntry *next = focus->next;
+      dataset_entry_dispose(focus);
+      focus = next;
+    }
+    dataset_entry_dispose(focus);
+  }
+  free(dataset);
+}
+
+Dataset* dataset_create(DatasetHeader* header) {
+  if (header == NULL) {
+    if (DEBUG) {
+      printf("[%s : %d] %s\n", __FILE__, __LINE__, "WARNING !! Tried to create a dataset with a null header.");
+    }
+    return NULL;
+  }
+  Dataset *result = malloc(sizeof(*result));
+  result->header = header;
+  result->head = NULL;
+  result->tail = NULL;
+  return result;
+}
+
 void dataset_feature_dispose(DatasetFeature* target) {
   free(target->name);
   free(target->discrete_possibles);
@@ -92,7 +140,7 @@ void dataset_header_add_feature(DatasetHeader* header, DatasetFeature* feature) 
     // Increment the maximum feature count.
     header->max_feature_count += FEATURE_COUNT_STEP;
     // Allocate the new feature list and copy the old one into it.
-    DatasetFeature** newFeatures = malloc(sizeof(DatasetFeature*) * result->max_feature_count);
+    DatasetFeature** newFeatures = malloc(sizeof(DatasetFeature*) * header->max_feature_count);
     for(unsigned int i = 0; i < header->feature_count; i++) {
       newFeatures[i] = header->features[i];
     }
@@ -151,6 +199,8 @@ Dataset* dataset_load_from_disk(char* name) {
   while ((read = getline(&line, &len, fp)) != -1) {
     // Allocate the memory for the feature
     DatasetFeature *feature = malloc(sizeof(*feature));
+    feature->continuous_lower_boundary = DBL_MAX;
+    feature->continuous_upper_boundary = DBL_MIN;
     unsigned char column_id = 0;
     // Tokenize the line for parsing.
     char *token = strtok(line, " ");
@@ -189,17 +239,17 @@ Dataset* dataset_load_from_disk(char* name) {
           if (column_id == 3) {
             // Obtain the number of discrete possible values for this feature.
             char* end;
-            unsigned int pos_count = strol(token, &end, 10);
+            unsigned int pos_count = strtol(token, &end, 10);
             feature->discrete_possibility_count = pos_count;
             feature->discrete_possibles = malloc(sizeof(int) * pos_count);
           }
           if (column_id >= 4) {
             // Add the discrete possibilities to the feature.
-            unsigned int index = columnId - 4;
+            unsigned int index = column_id - 4;
             // Make sure the possibility count is not overflowing.
-            if (index < feature->discrete_possibles) {
+            if (index < feature->discrete_possibility_count) {
               char* end;
-              feature->discrete_possibles[index] = strol(token, &end, 10);
+              feature->discrete_possibles[index] = strtol(token, &end, 10);
             } else {
               if (DEBUG) {
                 printf("[%s : %d] %s\n", __FILE__, __LINE__, "WARNING !! Trying to add more discrete possibilities than the original specified amount.");
@@ -233,7 +283,7 @@ Dataset* dataset_load_from_disk(char* name) {
   // Close the file after parsing.
   fclose(fp);
   free(line);
-  if (!found_label | (dataset->header->feature_count < 2)) {
+  if (!found_label | (header->feature_count < 2)) {
     if (DEBUG) {
       printf("[%s : %d] %s\n", __FILE__, __LINE__, "The dataset must have at least two features and a label.");
     }
@@ -242,5 +292,117 @@ Dataset* dataset_load_from_disk(char* name) {
     dataset_header_dispose(header);
     return NULL;
   }
-  return NULL;
+  // Debug the header to make sure it's correct.
+  if (DEBUG) {
+    printf("[%s : %d] %s %u\n", __FILE__, __LINE__, "Header features:", header->feature_count);
+    for (unsigned int i = 0; i < header->feature_count; i++) {
+      printf("[%s : %d] -------------\n", __FILE__, __LINE__);
+      printf("[%s : %d] Name: %s\n", __FILE__, __LINE__, header->features[i]->name);
+      printf("[%s : %d] Type: %u\n", __FILE__, __LINE__, header->features[i]->type);
+      printf("[%s : %d] Is label: %u\n", __FILE__, __LINE__, header->features[i]->is_label);
+      printf("[%s : %d] Possibility count (discrete): %u\n", __FILE__, __LINE__, header->features[i]->discrete_possibility_count);
+    }
+  }
+  // Allocate memory for the dataset.
+  Dataset *dataset = dataset_create(header);
+  // Get the handle for the file.
+  fp = fopen(data_path, "r");
+  // Verify the file was opened before operating on it.
+  if (fp == NULL) {
+    if (DEBUG) {
+      printf("[%s : %d] %s\n", __FILE__, __LINE__, "Unable to read data file.");
+    }
+    free(names_path);
+    free(data_path);
+    dataset_dispose(dataset, true, true);
+    return NULL;
+  }
+  line = NULL;
+  len = 0;
+  read = 0;
+  unsigned short count = 0;
+  DatasetEntry *previous = NULL;
+  // Parse lines to fill the dataset.
+  while ((read = getline(&line, &len, fp)) != -1) {
+    // Ignore empty lines.
+    if (read <= 1) {
+      continue;
+    }
+    // Allocate the memory for the dataset.
+    DatasetEntry *entry = dataset_entry_create(dataset->header->feature_count);
+    unsigned int column_id = 0;
+    // Set the entry as the head if it's the first one.
+    if (count == 0) {
+      dataset->head = entry;
+    } else {
+      previous->next = entry;
+      entry->previous = previous;
+    }
+    // Tokenize the string using commas (CSV format).
+    char *token = strtok(line, ",");
+    while (token != NULL) {
+      // Determine how to add the value depending on the feature type/
+      if(dataset->header->features[column_id]->type == CONTINUOUS) {
+        char *end;
+        // Parse the token into a double.
+        double value = strtod(token, &end);
+        entry->values[column_id].continous = value;
+        // Check if value goes below bounds.
+        if(dataset->header->features[column_id]->continuous_lower_boundary > value) {
+          dataset->header->features[column_id]->continuous_lower_boundary = value;
+        }
+        // Check if value goes above bounds.
+        if(dataset->header->features[column_id]->continuous_upper_boundary < value) {
+          dataset->header->features[column_id]->continuous_upper_boundary = value;
+        }
+        bool found_dot = false;
+        unsigned short precision = 0;
+        // Determine the precision of the value by counting the number of decimals.
+        for (unsigned short i = 0; token[i] != '\0'; i++) {
+          if (found_dot) {
+            precision++;
+          }
+          if (token[i] == '\0') {
+            found_dot = true;
+          }
+        }
+        if (dataset->header->features[column_id]->continuous_precision < precision) {
+          dataset->header->features[column_id]->continuous_precision = precision;
+        }
+      } else {
+        char *end;
+        // Convert token into long, then cast into int.
+        unsigned int value = strtol(token, &end, 10);
+        entry->values[column_id].discrete = value;
+      }
+      column_id++;
+      // Obtain next token.
+      token = strtok(NULL, ",");
+    }
+    // Verify that the feature count matches the value count.
+    if (column_id != dataset->header->feature_count) {
+      if (DEBUG) {
+        printf("[%s : %d] %s %u %u %u\n", __FILE__, __LINE__, "Unable to parse data file:", count, column_id, dataset->header->feature_count);
+      }
+      free(names_path);
+      free(data_path);
+      dataset_dispose(dataset, true, true);
+      return NULL;
+    }
+    if (DEBUG) {
+      printf("[%s : %d] %s %u\n", __FILE__, __LINE__, "Loaded entry #", count);
+    }
+    previous = entry;
+    count++;
+  }
+  dataset->tail = previous;
+  // Close the file after parsing.
+  fclose(fp);
+  free(line);
+  dataset->entry_count = count;
+  // Print the final entry count for debug purposes.
+  if (DEBUG) {
+    printf("[%s : %d] %s %u\n", __FILE__, __LINE__, "Final entry count:", dataset->entry_count);
+  }
+  return dataset;
 }
