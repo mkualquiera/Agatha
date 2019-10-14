@@ -27,9 +27,17 @@ DecisionTree* decision_tree_create (Dataset *dataset, unsigned int feature_mask,
   return result;
 }
 
-void decision_tree_optimize(DecisionTree *decision_tree) {
-  information_find_best_split(decision_tree->dataset, &decision_tree->feature_index,&decision_tree->split_value);
-  Dataset *left_dataset;
-  Dataset *right_dataset;
-  dataset_split(decision_tree->dataset, decision_tree->feature_index, decision_tree->split_value,&left_dataset,&right_dataset);
+void decision_tree_train(DecisionTree *decision_tree) {
+  unsigned int feature_index;
+  double split_value;
+  double gain = information_find_best_split(decision_tree->dataset, &feature_index,&split_value);
+  if (gain > 0.0) {
+    Dataset *left_dataset;
+    Dataset *right_dataset;
+    dataset_split(decision_tree->dataset, decision_tree->feature_index,  decision_tree->split_value,&left_dataset,&right_dataset);
+    decision_tree->left = decision_tree_create(left_dataset, decision_tree->feature_mask, decision_tree);
+    decision_tree->right = decision_tree_create(right_dataset, decision_tree->feature_mask, decision_tree);
+    decision_tree_train(decision_tree->left);
+    decision_tree_train(decision_tree->right);
+  }
 }

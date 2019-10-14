@@ -220,10 +220,14 @@ void dataset_split(Dataset *dataset, unsigned int feature_index, double split_va
     }
   }
   // Rewind the chains
-  left_slot->next = left_head;
-  left_head->previous = left_slot;
-  right_slot->previous = right_tail;
-  right_tail->next = right_slot;
+  if (left_slot != NULL) {
+    left_slot->next = left_head;
+    left_head->previous = left_slot;
+  }
+  if (right_slot != NULL) {
+    right_slot->previous = right_tail;
+    right_tail->next = right_slot;
+  }
   left_tail->next = right_head;
   right_head->previous = left_tail;
   *left = dataset_create(dataset->header);

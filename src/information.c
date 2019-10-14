@@ -75,7 +75,7 @@ double information_gain_on_split(Dataset *dataset, unsigned int feature_index, d
 }
 
 // Find the best information split in a dataset.
-void information_find_best_split(Dataset *dataset, unsigned int* feature_index, double* split_value) {
+double information_find_best_split(Dataset *dataset, unsigned int* feature_index, double* split_value) {
   double best_gain = 0.0;
   unsigned int best_feature_index = 0;
   double best_split_value = 0.0;
@@ -97,6 +97,7 @@ void information_find_best_split(Dataset *dataset, unsigned int* feature_index, 
   }
   *feature_index = best_feature_index;
   *split_value = best_split_value;
+  return best_gain;
 }
 
 
