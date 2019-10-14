@@ -1,0 +1,237 @@
+<-> Cleaning up...
+<-> Making headers...
+<!> Headers for ./src/debug.c made
+<!> Headers for ./src/dataset.c made
+<!> Headers for ./src/decision_tree.c made
+<!> Headers for ./src/information.c made
+<!> Headers for ./src/main.c made
+<!> Headers for ./src/benchmarking.c made
+<-> Adding header guards...
+<!> Headers guards for ./src/information.h made
+<!> Headers guards for ./src/benchmarking.h made
+<!> Headers guards for ./src/main.h made
+<!> Headers guards for ./src/dataset.h made
+<!> Headers guards for ./src/decision_tree.h made
+<!> Headers guards for ./src/debug.h made
+<-> Running premake...
+Building configurations...
+Running action 'gmake2'...
+Generated Makefile...
+Generated Agatha.make...
+Done (42ms).
+<-> Running make...
+==== Building Agatha (debug) ====
+benchmarking.c
+dataset.c
+debug.c
+decision_tree.c
+information.c
+main.c
+Linking Agatha
+<-> Copying datasets...
+<-> Starting program...
+Training on 372 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 2 : 67.390000 with 0.208892 information gain
+Parent 2 67.390000
+Training on 303 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 2 : 47.310000 with 0.068519 information gain
+Parent 2 47.310000
+Training on 132 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 0 : 6.555000 with 0.169265 information gain
+Parent 0 6.555000
+Training on 24 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 0 6.555000
+Training on 108 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 3 : 2666.500000 with 0.120320 information gain
+Parent 3 2666.500000
+Training on 67 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 4 : 18.500000 with 0.135096 information gain
+Parent 4 18.500000
+Training on 5 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 4 18.500000
+Training on 62 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 2 : 24.285000 with 0.100292 information gain
+Parent 2 24.285000
+Training on 3 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 2 24.285000
+Training on 59 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 5 : 51.500000 with 0.125296 information gain
+Parent 5 51.500000
+Training on 9 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 2 : 29.715000 with 0.811278 information gain
+Parent 2 29.715000
+Training on 3 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 2 29.715000
+Training on 6 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 5 51.500000
+Training on 50 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 4 : 20.500000 with 0.122626 information gain
+Parent 4 20.500000
+Training on 12 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 3 : 1152.500000 with 0.639473 information gain
+Parent 3 1152.500000
+Training on 5 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 3 1152.500000
+Training on 7 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 0 : 7.705000 with 0.650022 information gain
+Parent 0 7.705000
+Training on 5 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 0 7.705000
+Training on 2 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 4 20.500000
+Training on 38 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 2 : 45.290000 with 0.125202 information gain
+Parent 2 45.290000
+Training on 36 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 4 : 32.500000 with 0.187176 information gain
+Parent 4 32.500000
+Training on 35 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 4 32.500000
+Training on 1 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 2 45.290000
+Training on 2 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 3 2666.500000
+Training on 41 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 4 : 31.500000 with 0.241737 information gain
+Parent 4 31.500000
+Training on 27 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 2 : 30.075000 with 0.075897 information gain
+Parent 2 30.075000
+Training on 7 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 2 30.075000
+Training on 20 entries.
+Trying to find best split...
+Hello
+7
+.......
+Unable to find a good enough split.
+Parent 4 31.500000
+Training on 14 entries.
+Trying to find best split...
+Hello
+7
+.......
+Found best split at 2 : 28.625000 with 0.349071 information gain
+Parent 2 28.625000
+Training on 8 entries.
+Trying to find 

@@ -79,6 +79,7 @@ double information_find_best_split(Dataset *dataset, unsigned int* feature_index
   double best_gain = 0.0;
   unsigned int best_feature_index = 0;
   double best_split_value = 0.0;
+
   for (unsigned int feature_index = 0; feature_index < dataset->header->feature_count; feature_index++) {
     //information_save_split_data(dataset, feature_index);
     DatasetFeature *feature = dataset->header->features[feature_index];
@@ -86,7 +87,12 @@ double information_find_best_split(Dataset *dataset, unsigned int* feature_index
       continue;
     }
     double step_size = pow(10, -feature->continuous_precision-1) * 5;
+    unsigned int count = 0;
     for(double split = feature->continuous_lower_boundary; split < feature->continuous_upper_boundary; split += step_size) {
+      if (count % 60 == 0) {
+        printf(".");
+      }
+      count++;
       double gain = information_gain_on_split(dataset, feature_index, split);
       if (gain > best_gain) {
         best_gain = gain;
@@ -94,6 +100,7 @@ double information_find_best_split(Dataset *dataset, unsigned int* feature_index
         best_split_value = split;
       }
     }
+    printf("!\n");
   }
   *feature_index = best_feature_index;
   *split_value = best_split_value;

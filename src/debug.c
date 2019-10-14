@@ -1,3 +1,3 @@
 #if INTERFACE
-#define DEBUG 1
+#define DEBUG_LEVEL 1
 #endif
