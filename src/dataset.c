@@ -76,14 +76,16 @@ DatasetEntry* dataset_entry_create(unsigned int feature_count) {
     }
     return NULL;
   }
-  DatasetEntry *result = malloc(sizeof(*result));
-  result->values = malloc(sizeof(DatasetValue) * feature_count);
+  DatasetEntry *result = calloc(1, sizeof(*result));
+  result->values = calloc(feature_count, sizeof(DatasetValue));
   return result;
 }
 
+
+
 void dataset_dispose(Dataset *dataset, bool free_header, bool free_data) {
   if (free_header) {
-    free(dataset->header);
+    dataset_header_dispose(dataset->header);
   }
   if (free_data) {
     DatasetEntry *focus = dataset->head;
@@ -104,7 +106,7 @@ Dataset* dataset_create(DatasetHeader* header) {
     }
     return NULL;
   }
-  Dataset *result = malloc(sizeof(*result));
+  Dataset *result = calloc(1, sizeof(*result));
   result->header = header;
   result->has_cached_counts = false;
   result->head = NULL;
@@ -122,13 +124,14 @@ void dataset_header_dispose(DatasetHeader* header) {
   for(unsigned int i = 0; i < header->feature_count; i++) {
     dataset_feature_dispose(header->features[i]);
   }
+  free(header->features);
   free(header);
 }
 
 DatasetHeader* dataset_header_create() {
-  DatasetHeader *result = malloc(sizeof(*result));
+  DatasetHeader *result = calloc(1, sizeof(*result));
   result->max_feature_count = FEATURE_COUNT_STEP;
-  result->features = malloc(sizeof(DatasetFeature*) * result->max_feature_count);
+  result->features = calloc(result->max_feature_count, sizeof(DatasetFeature*));
   return result;
 }
 
@@ -145,7 +148,7 @@ void dataset_header_add_feature(DatasetHeader* header, DatasetFeature* feature) 
     // Increment the maximum feature count.
     header->max_feature_count += FEATURE_COUNT_STEP;
     // Allocate the new feature list and copy the old one into it.
-    DatasetFeature** newFeatures = malloc(sizeof(DatasetFeature*) * header->max_feature_count);
+    DatasetFeature** newFeatures = calloc(header->max_feature_count,sizeof(DatasetFeature*));
     for(unsigned int i = 0; i < header->feature_count; i++) {
       newFeatures[i] = header->features[i];
     }
@@ -164,8 +167,8 @@ Dataset* dataset_load_from_disk(char* name) {
   unsigned int data_path_length = base_path_length + strlen(DATA_FILENAME);
   unsigned int names_path_length = base_path_length + strlen(NAMES_FILENAME);
   // Allocate the buffers for storing the file paths.
-  char *data_path = malloc(sizeof(char*) * data_path_length);
-  char *names_path = malloc(sizeof(char*) * names_path_length);
+  char *data_path = calloc(data_path_length, sizeof(char*));
+  char *names_path = calloc(names_path_length, sizeof(char*));
   // Build the paths into the allocated buffers.
   snprintf(data_path, data_path_length, "%s/%s/%s", DATASETS_FOLDER, name, DATA_FILENAME);
   snprintf(names_path, names_path_length, "%s/%s/%s", DATASETS_FOLDER, name, NAMES_FILENAME);
@@ -203,7 +206,7 @@ Dataset* dataset_load_from_disk(char* name) {
   // Parse lines to obtain the features.
   while ((read = getline(&line, &len, fp)) != -1) {
     // Allocate the memory for the feature
-    DatasetFeature *feature = malloc(sizeof(*feature));
+    DatasetFeature *feature = calloc(1, sizeof(*feature));
     feature->continuous_lower_boundary = DBL_MAX;
     feature->continuous_upper_boundary = DBL_MIN;
     unsigned char column_id = 0;
@@ -212,7 +215,7 @@ Dataset* dataset_load_from_disk(char* name) {
     while (token != NULL) {
       if (column_id == 0) {
         // Copy the name into the feature.
-        feature->name = malloc(sizeof(char) * strlen(token) + 1);
+        feature->name = calloc(strlen(token) + 1, sizeof(char));
         strcpy(feature->name, token);
       }
       if (column_id == 1) {
@@ -248,7 +251,7 @@ Dataset* dataset_load_from_disk(char* name) {
             char* end;
             unsigned int pos_count = strtol(token, &end, 10);
             feature->discrete_possibility_count = pos_count;
-            feature->discrete_possibles = malloc(sizeof(int) * pos_count);
+            feature->discrete_possibles = calloc(pos_count, sizeof(int));
           }
           if (column_id >= 4) {
             // Add the discrete possibilities to the feature.
@@ -412,5 +415,7 @@ Dataset* dataset_load_from_disk(char* name) {
   if (DEBUG) {
     printf("[%s : %d] %s %u\n", __FILE__, __LINE__, "Final entry count:", dataset->entry_count);
   }
+  free(names_path);
+  free(data_path);
   return dataset;
 }
