@@ -111,6 +111,7 @@ Dataset* dataset_create(DatasetHeader* header) {
   result->has_cached_counts = false;
   result->head = NULL;
   result->tail = NULL;
+  result->counts = NULL;
   return result;
 }
 

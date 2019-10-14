@@ -65,6 +65,9 @@ double information_gain_on_split(Dataset *dataset, unsigned int feature_index, d
   double left_entropy = information_entropy(left_count, dataset->header->label->discrete_possibility_count);
   double right_entropy = information_entropy(right_count, dataset->header->label->discrete_possibility_count);
   double final_entropy = (((double)left_count[0] / (double)parent_count[0]) * left_entropy) + (((double)right_count[0] / (double)parent_count[0]) * right_entropy);
+  // Free the counts to eliminate memory leak.
+  free(right_count);
+  free(left_count);
   return parent_entropy - final_entropy;
 }
 
