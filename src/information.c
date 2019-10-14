@@ -36,6 +36,23 @@ unsigned int* information_dataset_count(Dataset *dataset, bool limited, unsigned
     }
     focus = focus->next;
   }
+  bool shouldCount = true;
+  if (limited) {
+    bool passes_limit = focus->values[feature_index].continous < split_value;
+    if (greater_than) {
+      passes_limit = !passes_limit;
+    }
+    shouldCount = passes_limit;
+  }
+  if (shouldCount) {
+    for (unsigned int i = 0; i < label->discrete_possibility_count; i++) {
+      if (focus->values[label_index].discrete == label->discrete_possibles[i]) {
+        result[i+1]++;
+        break;
+      }
+    }
+    result[0]++;
+  }
   if (!limited) {
     if(!dataset->has_cached_counts) {
       dataset->counts = result;

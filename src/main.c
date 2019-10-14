@@ -9,6 +9,8 @@ int main(int argc, char* argv[]) {
   Dataset *data = dataset_load_from_disk("rust-train");
   DecisionTree *tree = decision_tree_create(data,0,NULL);
   decision_tree_train(tree);
+  decision_tree_output_graph(tree);
+  //decision_tree_print(tree,0);
   /*
   benchmarking_init();
   unsigned int dummy = 0;
