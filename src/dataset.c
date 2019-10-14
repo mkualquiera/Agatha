@@ -162,6 +162,78 @@ void dataset_header_add_feature(DatasetHeader* header, DatasetFeature* feature) 
   header->feature_count++;
 }
 
+void dataset_split(Dataset *dataset, unsigned int feature_index, double split_value, Dataset **left, Dataset **right) {
+  DatasetEntry *left_slot = dataset->head->previous;
+  DatasetEntry *right_slot = dataset->tail->next;
+  left_slot->next = NULL;
+  right_slot->previous = NULL;
+  DatasetEntry *left_head = NULL;
+  DatasetEntry *right_head = NULL;
+  DatasetEntry *left_tail = NULL;
+  DatasetEntry *right_tail = NULL;
+  DatasetEntry *focus = dataset->head;
+  while ((focus != dataset->tail) & (focus != NULL)) {
+    bool passes_limit = focus->values[feature_index].continous < split_value;
+    if (passes_limit) {
+      if(left_tail == NULL) {
+        left_tail = focus;
+      } else {
+        left_tail->next = focus;
+        focus->previous = left_tail;
+      }
+      if(left_head == NULL) {
+        left_head = focus;
+      }
+    } else {
+      if(right_tail == NULL) {
+        right_tail = focus;
+      } else {
+        right_tail->next = focus;
+        focus->previous = right_tail;
+      }
+      if(right_head == NULL) {
+        right_head = focus;
+      }
+    }
+    focus = focus->next;
+  }
+  bool passes_limit = focus->values[feature_index].continous < split_value;
+  if (passes_limit) {
+    if(left_tail == NULL) {
+      left_tail = focus;
+    } else {
+      left_tail->next = focus;
+      focus->previous = left_tail;
+    }
+    if(left_head == NULL) {
+      left_head = focus;
+    }
+  } else {
+    if(right_tail == NULL) {
+      right_tail = focus;
+    } else {
+      right_tail->next = focus;
+      focus->previous = right_tail;
+    }
+    if(right_head == NULL) {
+      right_head = focus;
+    }
+  }
+  // Rewind the chains
+  left_slot->next = left_head;
+  left_head->previous = left_slot;
+  right_slot->previous = right_tail;
+  right_tail->next = right_slot;
+  left_tail->next = right_head;
+  right_head->previous = left_tail;
+  *left = dataset_create(dataset->header);
+  *right = dataset_create(dataset->header);
+  (*left)->head = left_head;
+  (*left)->tail = left_tail;
+  (*right)->head = right_head;
+  (*right)->tail = right_tail;
+}
+
 Dataset* dataset_load_from_disk(char* name) {
   // Obtain the length of filepaths so the buffers can be allocated properly.
   unsigned int base_path_length = strlen(DATASETS_FOLDER) + 1 + strlen(name) + 1 + 1;

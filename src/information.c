@@ -5,6 +5,7 @@
 
 #include "information.h"
 
+// Obtain the count for each discrete possibility given a filter.
 unsigned int* information_dataset_count(Dataset *dataset, bool limited, unsigned int feature_index, bool greater_than, double split_value) {
   if (!limited) {
     if (dataset->has_cached_counts) {
@@ -44,6 +45,7 @@ unsigned int* information_dataset_count(Dataset *dataset, bool limited, unsigned
   return result;
 }
 
+// Calculate the entropy from a given set of counts.
 double information_entropy(unsigned int *counts, unsigned int counts_count) {
   double accumulation = 0;
   for (unsigned int i = 0; i < counts_count; i++) {
@@ -57,6 +59,7 @@ double information_entropy(unsigned int *counts, unsigned int counts_count) {
   return -accumulation;
 }
 
+// Obtain the information gain of a given split in the dataset.
 double information_gain_on_split(Dataset *dataset, unsigned int feature_index, double split_value) {
   unsigned int* parent_count = information_dataset_count(dataset, false, 0, false, 0.0);
   unsigned int* left_count = information_dataset_count(dataset, true, feature_index, false, split_value);
@@ -71,6 +74,7 @@ double information_gain_on_split(Dataset *dataset, unsigned int feature_index, d
   return parent_entropy - final_entropy;
 }
 
+// Find the best information split in a dataset.
 void information_find_best_split(Dataset *dataset, unsigned int* feature_index, double* split_value) {
   double best_gain = 0.0;
   unsigned int best_feature_index = 0;
@@ -95,6 +99,8 @@ void information_find_best_split(Dataset *dataset, unsigned int* feature_index, 
   *split_value = best_split_value;
 }
 
+
+// Save a histogram of the splits into a file.
 void information_save_split_data(Dataset *dataset, unsigned int feature_index) {
   DatasetFeature *feature = dataset->header->features[feature_index];
   FILE *data_file = fopen(feature->name, "w");
