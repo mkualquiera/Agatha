@@ -1,0 +1,7 @@
+ph c
+soil_temperature c
+soil_moisture c
+illuminance c
+env_temperature c
+env_humidity c
+diseased d y 2 0 1
