@@ -1,5 +1,6 @@
 #if INTERFACE
 #include "dataset.h"
+#include "boolean_mask.h"
 #include <math.h>
 #endif
 
@@ -92,12 +93,16 @@ double information_gain_on_split(Dataset *dataset, unsigned int feature_index, d
 }
 
 // Find the best information split in a dataset.
-double information_find_best_split(Dataset *dataset, unsigned int* feature_index, double* split_value) {
+double information_find_best_split(Dataset *dataset, unsigned int* feature_index, double* split_value, BooleanMask *mask) {
   double best_gain = 0.0;
   unsigned int best_feature_index = 0;
   double best_split_value = 0.0;
 
   for (unsigned int feature_index = 0; feature_index < dataset->header->feature_count; feature_index++) {
+    if (boolean_mask_get(mask, feature_index)) {
+      printf("Ignoring feature %u because it's masked.\n", feature_index);
+      continue;
+    }
     //information_save_split_data(dataset, feature_index);
     DatasetFeature *feature = dataset->header->features[feature_index];
     if (feature->type == DISCRETE) {

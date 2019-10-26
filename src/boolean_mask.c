@@ -5,7 +5,6 @@
 
 typedef struct BooleanMask {
 unsigned char *chars;
-unsigned int entry_count;
 unsigned int char_count;
 } BooleanMask;
 
@@ -13,10 +12,20 @@ unsigned int char_count;
 
 #include "boolean_mask.h"
 
+BooleanMask *boolean_mask_copy (BooleanMask *origin) {
+  BooleanMask *result = boolean_mask_create();
+  result->char_count = origin->char_count;
+  result->chars = malloc(sizeof(unsigned char) * origin->char_count);
+  for (unsigned int i = 0; i < origin->char_count; i++) {
+    result->chars[i] = origin->chars[i];
+  }
+  return result;
+}
+
 BooleanMask *boolean_mask_create () {
   BooleanMask *result = malloc(sizeof(BooleanMask));
   result->chars = NULL;
-  result->entry_count;
+  result->char_count = 0;
   return result;
 }
 
@@ -41,7 +50,7 @@ void boolean_mask_set(BooleanMask *mask, unsigned int index, bool value) {
   mask->chars[char_index] = desired;
 }
 
-bool boolean_mask_get(BooleanMask *mask, unsigned int index, bool value) {
+bool boolean_mask_get(BooleanMask *mask, unsigned int index) {
   unsigned int char_index = index / 8;
   boolean_mask_reallocate(mask, char_index);
   unsigned int inner_index = index - (char_index * 8);

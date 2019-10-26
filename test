@@ -1,0 +1,359 @@
+<-> Cleaning up...
+<-> Making headers...
+<!> Headers for ./src/dataset.c made
+<!> Headers for ./src/debug.c made
+<!> Headers for ./src/main.c made
+<!> Headers for ./src/information.c made
+<!> Headers for ./src/benchmarking.c made
+<!> Headers for ./src/decision_tree.c made
+<!> Headers for ./src/boolean_mask.c made
+<-> Adding header guards...
+<!> Headers guards for ./src/dataset.h made
+<!> Headers guards for ./src/information.h made
+<!> Headers guards for ./src/debug.h made
+<!> Headers guards for ./src/main.h made
+<!> Headers guards for ./src/boolean_mask.h made
+<!> Headers guards for ./src/benchmarking.h made
+<!> Headers guards for ./src/decision_tree.h made
+<-> Running premake...
+Building configurations...
+Running action 'gmake2'...
+Generated Makefile...
+Generated Agatha.make...
+Done (141ms).
+<-> Running make...
+==== Building Agatha (debug) ====
+benchmarking.c
+boolean_mask.c
+dataset.c
+debug.c
+decision_tree.c
+information.c
+main.c
+Linking Agatha
+<-> Copying datasets...
+<-> Starting program...
+Training on 372 entries.
+Trying to find best split...
+...............!
+........................................!
+...............................................................................................................................................................................................................................................................................!
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+.!
+...!
+Found best split at 2 : 67.390000 with 0.209127 information gain
+Training on 303 entries.
+Trying to find best split...
+...............!
+........................................!
+Ignoring feature 2 because it's masked.
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+.!
+...!
+Found best split at 0 : 6.375000 with 0.033929 information gain
+Training on 58 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+.!
+...!
+Found best split at 3 : 1861.500000 with 0.141421 information gain
+Training on 17 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+...!
+Found best split at 1 : 19.505000 with 0.140781 information gain
+Training on 2 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+...!
+Unable to find a good enough split.
+Training on 15 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+...!
+Found best split at 4 : 22.500000 with 0.249022 information gain
+Training on 10 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+...!
+Unable to find a good enough split.
+Training on 5 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+...!
+Found best split at 5 : 37.500000 with 0.321928 information gain
+Training on 2 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 3 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 41 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+...!
+Found best split at 5 : 89.500000 with 0.071535 information gain
+Training on 7 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+Ignoring feature 5 because it's masked.
+Found best split at 1 : 23.505000 with 0.863121 information gain
+Training on 2 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 5 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 34 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+Ignoring feature 5 because it's masked.
+Found best split at 1 : 19.255000 with 0.132610 information gain
+Training on 2 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+Ignoring feature 5 because it's masked.
+Found best split at 4 : 18.500000 with 1.000000 information gain
+Training on 1 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 1 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 32 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+.!
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 245 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+.!
+...!
+Found best split at 4 : 17.500000 with 0.023954 information gain
+Training on 5 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+Ignoring feature 4 because it's masked.
+...!
+Unable to find a good enough split.
+Training on 240 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+Ignoring feature 4 because it's masked.
+...!
+Found best split at 5 : 33.500000 with 0.020140 information gain
+Training on 4 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 236 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Found best split at 3 : 2896.500000 with 0.015293 information gain
+Training on 141 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Found best split at 1 : 22.755000 with 0.019597 information gain
+Training on 88 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 53 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 95 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+........................................!
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Found best split at 1 : 20.005000 with 0.085674 information gain
+Training on 8 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 87 entries.
+Trying to find best split...
+Ignoring feature 0 because it's masked.
+Ignoring feature 1 because it's masked.
+Ignoring feature 2 because it's masked.
+Ignoring feature 3 because it's masked.
+Ignoring feature 4 because it's masked.
+Ignoring feature 5 because it's masked.
+Unable to find a good enough split.
+Training on 69 entries.
+Trying to find best split...
+...............!
+........................................!
+Ignoring feature 2 because it's masked.
+.............................................................................................................................................................................................................................................................................................................................................................................................................................!
+.!
+...!
+Unable to find a good enough split.
+"soil_moisture<67.390000"->"ph<6.375000"
+"soil_moisture<67.390000"->"ph>=6.375000"
+"ph<6.375000"->"illuminance<1861.500000"
+"ph<6.375000"->"illuminance>=1861.500000"
+"illuminance<1861.500000"->"soil_temperature<19.505000"
+"illuminance<1861.500000"->"soil_temperature>=19.505000"
+"soil_temperature<19.505000"->"Rust probability: 0.000000"
+"soil_temperature>=19.505000"->"env_temperature<22.500000"
+"soil_temperature>=19.505000"->"env_temperature>=22.500000"
+"env_temperature<22.500000"->"Rust probability: 0.800000"
+"env_temperature>=22.500000"->"env_humidity<37.500000"
+"env_temperature>=22.500000"->"env_humidity>=37.500000"
+"env_humidity<37.500000"->"Rust probability: 0.500000"
+"env_humidity>=37.500000"->"Rust probability: 0.000000"
+"illuminance>=1861.500000"->"env_humidity<89.500000"
+"illuminance>=1861.500000"->"env_humidity>=89.500000"
+"env_humidity<89.500000"->"soil_temperature<23.505000"
+"env_humidity<89.500000"->"soil_temperature>=23.505000"
+"soil_temperature<23.505000"->"Rust probability: 0.000000"
+"soil_temperature>=23.505000"->"Rust probability: 1.000000"
+"env_humidity>=89.500000"->"soil_temperature<19.255000"
+"env_humidity>=89.500000"->"soil_temperature>=19.255000"
+"soil_temperature<19.255000"->"env_temperature<18.500000"
+"soil_temperature<19.255000"->"env_temperature>=18.500000"
+"env_temperature<18.500000"->"Rust probability: 1.000000"
+"env_temperature>=18.500000"->"Rust probability: 0.000000"
+"soil_temperature>=19.255000"->"Rust probability: 1.000000"
+"ph>=6.375000"->"env_temperature<17.500000"
+"ph>=6.375000"->"env_temperature>=17.500000"
+"env_temperature<17.500000"->"Rust probability: 0.000000"
+"env_temperature>=17.500000"->"env_humidity<33.500000"
+"env_temperature>=17.500000"->"env_humidity>=33.500000"
+"env_humidity<33.500000"->"Rust probability: 0.000000"
+"env_humidity>=33.500000"->"illuminance<2896.500000"
+"env_humidity>=33.500000"->"illuminance>=2896.500000"
+"illuminance<2896.500000"->"soil_temperature<22.755000"
+"illuminance<2896.500000"->"soil_temperature>=22.755000"
+"soil_temperature<22.755000"->"Rust probability: 0.693182"
+"soil_temperature>=22.755000"->"Rust probability: 0.528302"
+"illuminance>=2896.500000"->"soil_temperature<20.005000"
+"illuminance>=2896.500000"->"soil_temperature>=20.005000"
+"soil_temperature<20.005000"->"Rust probability: 0.000000"
+"soil_temperature>=20.005000"->"Rust probability: 0.528736"
+"soil_moisture>=67.390000"->"Rust probability: 0.000000"
+<-> Done!

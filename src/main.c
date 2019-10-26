@@ -7,7 +7,8 @@
 
 int main(int argc, char* argv[]) {
   Dataset *data = dataset_load_from_disk("rust-train");
-  DecisionTree *tree = decision_tree_create(data,0,NULL);
+  BooleanMask *mask = boolean_mask_create();
+  DecisionTree *tree = decision_tree_create(data,mask,NULL);
   decision_tree_train(tree);
   decision_tree_output_graph(tree);
   //decision_tree_print(tree,0);

@@ -4,10 +4,11 @@
 #include "dataset.h"
 #include <stdbool.h>
 #include "information.h"
+#include "boolean_mask.h"
 
 typedef struct DecisionTree {
   Dataset *dataset;
-  unsigned int feature_mask;
+  BooleanMask *feature_mask;
   unsigned int feature_index;
   double split_value;
   DecisionTree *parent;
@@ -21,7 +22,7 @@ typedef struct DecisionTree {
 #include "decision_tree.h"
 
 // Create a new decision tree from a dataset.
-DecisionTree* decision_tree_create (Dataset *dataset, unsigned int feature_mask, DecisionTree *parent) {
+DecisionTree* decision_tree_create (Dataset *dataset, BooleanMask *feature_mask, DecisionTree *parent) {
   DecisionTree *result = calloc(1, sizeof(DecisionTree));
   result->dataset = dataset;
   result->feature_mask = feature_mask;
@@ -87,11 +88,14 @@ void decision_tree_train(DecisionTree *decision_tree) {
   unsigned int feature_index;
   double split_value;
   printf("Trying to find best split...\n");
-  double gain = information_find_best_split(decision_tree->dataset, &feature_index,&split_value);
+  double gain = information_find_best_split(decision_tree->dataset, &feature_index,&split_value,decision_tree->feature_mask);
   if (gain > 0.0001) {
     printf("Found best split at %u : %f with %f information gain\n", feature_index, split_value, gain);
     decision_tree->feature_index = feature_index;
     decision_tree->split_value = split_value;
+    BooleanMask *new_mask = boolean_mask_copy(decision_tree->feature_mask);
+    boolean_mask_set(new_mask, feature_index, 1);
+    decision_tree->feature_mask = new_mask;
     Dataset *left_dataset;
     Dataset *right_dataset;
     dataset_split(decision_tree->dataset, decision_tree->feature_index,  decision_tree->split_value,&left_dataset,&right_dataset);
@@ -101,6 +105,7 @@ void decision_tree_train(DecisionTree *decision_tree) {
     decision_tree_train(decision_tree->right);
   } else {
     decision_tree->is_leaf = true;
+    information_dataset_count(decision_tree->dataset, false, 0, false, 0.0);
     printf("Unable to find a good enough split.\n");
   }
 }
