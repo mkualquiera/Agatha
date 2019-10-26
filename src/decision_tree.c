@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "information.h"
 #include "boolean_mask.h"
+#include "utils.h"
 
 typedef struct DecisionTree {
   Dataset *dataset;
@@ -28,6 +29,56 @@ DecisionTree* decision_tree_create (Dataset *dataset, BooleanMask *feature_mask,
   result->feature_mask = feature_mask;
   result->parent = parent;
   return result;
+}
+
+void decision_tree_test(DecisionTree *tree, Dataset *dataset) {
+  DatasetEntry *focus = dataset->head;
+  unsigned int success = 0;
+  unsigned int total = 0;
+  while(focus != NULL) {
+    int test = decision_tree_predict(tree, focus);
+    int expected = focus->values[dataset->header->label_index].discrete;
+    if (test == expected) {
+      success++;
+    }
+    printf("Expected: %d Obtained: %d Pass: %d\n", expected, test, expected == test);
+    total++;
+    focus = focus->next;
+  }
+  double accuracy = (double)success / (double)total;
+  printf("Passed %u out of %u: %f accuracy.\n", success, total, accuracy);
+}
+
+int decision_tree_predict(DecisionTree *tree, DatasetEntry *entry) {
+  if(tree->is_leaf) {
+    unsigned int poss_count = tree->dataset->header->label->discrete_possibility_count;
+    unsigned int *cummulative_counts = malloc(sizeof(unsigned int) * poss_count - 1);
+    int decision = tree->dataset->header->label->discrete_possibles[0];
+    for (unsigned int i = 0; i < poss_count; i++) {
+      if(i == 0) {
+        cummulative_counts[i] = tree->dataset->counts[i+1];
+      } else {
+        cummulative_counts[i] = cummulative_counts[i-1] + tree->dataset->counts[i+1];
+      }
+    }
+    unsigned int random_gen = randint(tree->dataset->counts[0]);
+    for (unsigned int i = 0; i < poss_count; i++) {
+      unsigned int lower_boundary = 0;
+      if (i != 0) {
+        lower_boundary = cummulative_counts[i-1];
+      }
+      unsigned int upper_boundary = cummulative_counts[i];
+      if((random_gen >= lower_boundary) & (random_gen < upper_boundary)) {
+        return tree->dataset->header->label->discrete_possibles[i];
+      }
+    }
+  } else {
+    if (entry->values[tree->feature_index].continous < tree->split_value) {
+      return decision_tree_predict(tree->left, entry);
+    } else {
+      return decision_tree_predict(tree->right, entry);
+    }
+  }
 }
 
 void decision_tree_output_graph (DecisionTree *decision_tree) {

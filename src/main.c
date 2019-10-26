@@ -2,15 +2,21 @@
 #include "information.h"
 #include "benchmarking.h"
 #include "decision_tree.h"
+#include <time.h>
 #include <errno.h>
 #include <sys/resource.h>
 
 int main(int argc, char* argv[]) {
+  srand(time(NULL));
   Dataset *data = dataset_load_from_disk("rust-train");
+  Dataset *test_data = dataset_load_from_disk("rust-test");
   BooleanMask *mask = boolean_mask_create();
   DecisionTree *tree = decision_tree_create(data,mask,NULL);
   decision_tree_train(tree);
-  decision_tree_output_graph(tree);
+  decision_tree_test(tree, test_data);
+  //int test_prediction = decision_tree_predict(tree, data->head);
+  //printf("%d\n", test_prediction);
+  //decision_tree_output_graph(tree);
   //decision_tree_print(tree,0);
   /*
   benchmarking_init();
