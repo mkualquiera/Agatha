@@ -2,14 +2,18 @@
 #include "information.h"
 #include "benchmarking.h"
 #include "decision_tree.h"
+#include "random_forest.h"
 #include <time.h>
 #include <errno.h>
 #include <sys/resource.h>
 
 int main(int argc, char* argv[]) {
   srand(time(NULL));
+  RandomForest *test = random_forest_generate_full("rust-train");
   Dataset *data = dataset_load_from_disk("rust-train");
   Dataset *test_data = dataset_load_from_disk("rust-test");
+
+  random_forest_test(test, test_data);
   BooleanMask *mask = boolean_mask_create();
   DecisionTree *tree = decision_tree_create(data,mask,NULL);
   decision_tree_train(tree);

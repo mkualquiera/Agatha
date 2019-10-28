@@ -35,18 +35,22 @@ void decision_tree_test(DecisionTree *tree, Dataset *dataset) {
   DatasetEntry *focus = dataset->head;
   unsigned int success = 0;
   unsigned int total = 0;
+  printf("Testing tree: ");
   while(focus != NULL) {
     int test = decision_tree_predict(tree, focus);
     int expected = focus->values[dataset->header->label_index].discrete;
     if (test == expected) {
       success++;
     }
-    printf("Expected: %d Obtained: %d Pass: %d\n", expected, test, expected == test);
+    if (total%40 == 0) {
+      printf("\n");
+    }
+    printf("%u", test==expected);
     total++;
     focus = focus->next;
   }
   double accuracy = (double)success / (double)total;
-  printf("Passed %u out of %u: %f accuracy.\n", success, total, accuracy);
+  printf("\nPassed %u out of %u: %f accuracy.\n", success, total, accuracy);
 }
 
 int decision_tree_predict(DecisionTree *tree, DatasetEntry *entry) {
@@ -69,6 +73,7 @@ int decision_tree_predict(DecisionTree *tree, DatasetEntry *entry) {
       }
       unsigned int upper_boundary = cummulative_counts[i];
       if((random_gen >= lower_boundary) & (random_gen < upper_boundary)) {
+        free(cummulative_counts);
         return tree->dataset->header->label->discrete_possibles[i];
       }
     }
@@ -135,13 +140,13 @@ void decision_tree_print(DecisionTree *decision_tree, unsigned int depth) {
 }
 
 void decision_tree_train(DecisionTree *decision_tree) {
-  printf("Training on %u entries.\n", decision_tree->dataset->entry_count);
+  //printf("Training on %u entries.\n", decision_tree->dataset->entry_count);
   unsigned int feature_index;
   double split_value;
-  printf("Trying to find best split...\n");
+  //printf("Trying to find best split...\n");
   double gain = information_find_best_split(decision_tree->dataset, &feature_index,&split_value,decision_tree->feature_mask);
   if (gain > 0.0001) {
-    printf("Found best split at %u : %f with %f information gain\n", feature_index, split_value, gain);
+    //printf("Found best split at %u : %f with %f information gain\n", feature_index, split_value, gain);
     decision_tree->feature_index = feature_index;
     decision_tree->split_value = split_value;
     BooleanMask *new_mask = boolean_mask_copy(decision_tree->feature_mask);
@@ -157,6 +162,6 @@ void decision_tree_train(DecisionTree *decision_tree) {
   } else {
     decision_tree->is_leaf = true;
     information_dataset_count(decision_tree->dataset, false, 0, false, 0.0);
-    printf("Unable to find a good enough split.\n");
+    //printf("Unable to find a good enough split.\n");
   }
 }
